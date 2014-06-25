@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<settings>
+	<picture_frame>
+		<posn>-148.5 76 0</posn>    <!--  X  Y  Z  -->
+		<scale>0.2</scale>
+		<picture_quad>
+			<sizen>90 80</sizen>
+			<image>http://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/P_religion-lightblue.png/30px-P_religion-lightblue.png</image><!-- the picture to be shown e.g. http://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/P_religion-lightblue.png/30px-P_religion-lightblue.png -->
+			<imagefocus>http://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/P_art-lightblue.png/30px-P_art-lightblue.png</imagefocus><!-- picture to be shown when mouse is over it e.g. http://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/P_art-lightblue.png/30px-P_art-lightblue.png -->
+			<halign>center</halign>
+			<valign>center</valign>
+		</picture_quad>
+		<hover_label>
+			<sizen>90 80</sizen>
+			<url>http://de.wikipedia.org</url><!-- online-page to which it should lead when clicked e.g. http://de.wikipedia.org -->
+			<halign>center</halign>
+			<valign>center</valign>
+			<focusareacolor1>0000</focusareacolor1>
+			<focusareacolor2>0000</focusareacolor2>
+		</hover_label>
+	</picture_frame>
+</settings>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	
+	
+
