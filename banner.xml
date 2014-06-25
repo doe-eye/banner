@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+
+<settings>
+	<picture_frame>
+		<posn>49.8 76.4 0</posn>
+		<scale>0.9</scale>
+		<picture_quad>
+			<sizen>50 30</sizen>
+			<image></image><!-- link to picture, that should be shown e.g. http://upload.wikimedia.org/wikipedia/commons/thumb/8/85/WLE_Austria_Logo_%28no_text%29.svg/50px-WLE_Austria_Logo_%28no_text%29.svg.png -->
+			<imagefocus></imagefocus><!-- leave empty if always same picture should be showed -->
+			<halign>center</halign>
+			<valign>center</valign>
+		</picture_quad>
+		<hover_label>
+			<sizen>50 30</sizen>
+			<url></url><!-- online-page to which picture_quad should lead when being clicked e.g. http://de.wikipedia.org -->
+			<halign>center</halign>
+			<valign>center</valign>
+			<focusareacolor1>0000</focusareacolor1>
+			<focusareacolor2>08F5</focusareacolor2><!-- color shown onMouseOver -->
+		</hover_label>
+	</picture_frame>
+</settings>
