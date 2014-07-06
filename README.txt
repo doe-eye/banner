@@ -8,19 +8,12 @@ INSTALLATION:
 4) restart xaseco2
 
 CONFIGURATION:
-you can show up to 3 banners
+you can show as many banners as you wish (tested with 3)
 for every banner shown you need an extra .xml-file
-name the first .xml file banner.xml, the second banner2.xml and the third banner3.xml
+adapt in the adapt-section of the plungin.banner.php the name of your xml(s) and
+un-comment the lines you may need for more banners (just remove // in front of the line)
 
-If you want to use more than 1 banner, you got to un-comment some lines of code in the plugin.banner.php.
-The functions:
 
-banner_startup
-banner_PlayerConnect
-banner_endMap
-banner_beginMap
-
-are the functions in which you must un-comment the part concerning banner2 and/or banner3
 
 
 DIFFERENT BANNER-TYPES:
@@ -31,5 +24,7 @@ or
 
 
 first possibility is in the example1.xml shown
-first possibility is in the example2.xml shown
+second possibility is in the example2.xml shown
+
+(2nd possibility was developed especially for being able to fake round-hover-effect)
 
