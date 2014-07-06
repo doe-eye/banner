@@ -1,162 +1,120 @@
 <?php
 /*****************************************************************************************
-plugin banner.php
-shows one or more (up to 3) banner
+plugin.banner.php
+->	shows one or more banner
+	(if more than one, un-comment the corresponding lines in the ADAPT-section below)
+->	needs a xml-file for each banner
 
-@author doe-eye alias d4u alias aca78
-
+@author aca (inspired by already existing plugins, sorry, don't remember which ones)
+@version: 2.0
 ******************************************************************************************/ 
+
 Aseco::registerEvent('onStartup', 'banner_startup');
 Aseco::registerEvent('onPlayerConnect', 'banner_PlayerConnect');
 Aseco::registerEvent('onEndMap', 'banner_endMap');
 Aseco::registerEvent('onBeginMap', 'banner_beginMap');
 
+global $bannerArray;
 
-global $banner1;
-global $banner2;
-global $banner3;
-
-
-function banner_startup($aseco, $command) {
-    global $banner1;
-	$banner1 = new Banner($aseco, "banner.xml");
-	$banner1->show = true;
-	$banner1->showWidget(1);
-/*		
-	global $banner2;
-	$banner2 = new Banner($aseco, "banner2.xml");
-	$banner2->show = true;
-	$banner2->showWidget(2);
+function banner_startup($aseco) {
+	global $bannerArray;
+	$bannerArray = array();
 	
-	global $banner3;
-	$banner3 = new Banner($aseco, "banner3.xml");
-	$banner3->show = true;
-	$banner3->showWidget(3);
-*/
+	
+/***************************************************** ADAPT BELOW ****************************************************/	
+	$banner = new Banner("banner.xml");
+	array_push($bannerArray, $banner);
+	
+	//$banner2 = new Banner("banner2.xml");
+	//array_push($bannerArray, $banner2);
+	
+	//$banner3 = new Banner("banner3.xml");
+	//array_push($bannerArray, $banner3);
+
+/***************************************************** ADAPT ABOVE ****************************************************/	
+
+
+	foreach($bannerArray as $banner){
+		$aseco->client->query('SendDisplayManialinkPage', $banner->getMLxml(true), 0, false);
+	}
+	
 }
 
-function banner_PlayerConnect($aseco, $command) {
-    global $banner1;
-	$banner1->show = true;
-    $banner1->showWidget(1);
-/*		
-	global $banner2;
-	$banner2->show = true;
-    $banner2->showWidget(2);
 
-	global $banner3;
-	$banner3->show = true;
-    $banner3->showWidget(3);	
-*/
-} 
-function banner_endMap($aseco, $command) {
-    global $banner1;
-    $banner1->show = false;
-    $banner1->showWidget(1);
-/*	
-	global $banner2;
-    $banner2->show = false;
-    $banner2->showWidget(2);
 
-	global $banner3;
-    $banner3->show = false;
-    $banner3->showWidget(3);
-*/
+function banner_endMap($aseco, $map) {
+	bannerShow($aseco, false);
 }
 
-function banner_beginMap($aseco, $command) {
-    global $banner1;
-    $banner1->show = true;
-    $banner1->showWidget(1);
-/*		
-    global $banner2;
-    $banner2->show = true;
-    $banner2->showWidget(2);
-	
-    global $banner3;
-    $banner3->show = true;
-    $banner3->showWidget(3);
-	*/
+function banner_PlayerConnect($aseco, $player) {
+	bannerShow($aseco, true);
 } 
+
+function banner_beginMap($aseco, $map) {
+	bannerShow($aseco, true);
+} 
+
+function bannerShow($aseco, $show){
+	global $bannerArray;
+	foreach($bannerArray as $banner){
+		$aseco->client->query('SendDisplayManialinkPage', $banner->getMLxml($show), 0, false);
+	}
+}
 
 
 class Banner {
-	public $show = true;
-	
-	private $aseco;
-	private $pf_posn = '';
-	private $pf_scale = '';
-	
-	private $pf_pq_sizen = '';
-	private $pf_pq_image = '';
-	private $pf_pq_imageFocus = '';
-	private $pf_pq_halign = '';
-	private $pf_pq_valign = '';
-	
-	private $pf_hl_sizen = '';
-	private $pf_hl_url = '';
-	private $pf_hl_halign = '';
-	private $pf_hl_valign = '';
-	private $pf_hl_focusareacolor1 = '';
-	private $pf_hl_focusareacolor2 = '';
+	private $sett;
+	private $instanceNo;
+	private static $instanceCount = 0;
 
-
-    function Banner($aseco, $xmlFileName) {
-		$this->aseco = $aseco;
-        try {
-            $xml_array = $aseco->xml_parser->parseXml($xmlFileName);			
-					
-			$this->pf_posn = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['POSN'][0];
-			$this->pf_scale = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['SCALE'][0];
-			
-			$this->pf_pq_sizen = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['PICTURE_QUAD'][0]['SIZEN'][0];
-			$this->pf_pq_image = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['PICTURE_QUAD'][0]['IMAGE'][0];
-			$this->pf_pq_imageFocus = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['PICTURE_QUAD'][0]['IMAGEFOCUS'][0];
-			$this->pf_pq_halign = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['PICTURE_QUAD'][0]['HALIGN'][0];
-			$this->pf_pq_valign = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['PICTURE_QUAD'][0]['VALIGN'][0];
-
-			$this->pf_hl_sizen = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['HOVER_LABEL'][0]['SIZEN'][0];
-			$this->pf_hl_url = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['HOVER_LABEL'][0]['URL'][0];
-			$this->pf_hl_halign = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['HOVER_LABEL'][0]['HALIGN'][0];
-			$this->pf_hl_valign = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['HOVER_LABEL'][0]['VALIGN'][0];
-			$this->pf_hl_focusareacolor1 = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['HOVER_LABEL'][0]['FOCUSAREACOLOR1'][0];
-			$this->pf_hl_focusareacolor2 = $xml_array['SETTINGS']['PICTURE_FRAME'][0]['HOVER_LABEL'][0]['FOCUSAREACOLOR2'][0];
-			
-        } catch (\Exception $e) {
-            $aseco->console("Error parsing: ". $e);
-        }
-    }
-
-    function showWidget($no) {
-        
+    function Banner($xmlFileName){
+		Banner::$instanceCount++;
+		$this->instanceNo = Banner::$instanceCount;
 		
-		if($this->show){
-			$xml ="
-				<manialink id=\"9180$no\" version=\"1\">			
-					<frame posn=\"$this->pf_posn\" scale=\"$this->pf_scale\">
-						<quad sizen=\"$this->pf_pq_sizen\" image=\"$this->pf_pq_image\"  halign=\"$this->pf_pq_halign\" valign=\"$this->pf_pq_valign\" ";
-							if($this->pf_pq_imageFocus == ''){
+		$this->sett = simplexml_load_file($xmlFileName);
+    }
+	function getMLxml($show){
+		if($show == true){
+			$xml ='
+				<manialink id="230178'.$this->instanceNo.'" version="1">			
+					<frame 
+						posn="'.$this->sett->picture_frame->posn.'" 
+						scale="'.$this->sett->picture_frame->scale.'">
+						
+						<quad 
+							sizen="'.$this->sett->picture_frame->picture_quad->sizen.'" 
+							image="'.$this->sett->picture_frame->picture_quad->image.'"  
+							halign="'.$this->sett->picture_frame->picture_quad->halign.'" 
+							valign="'.$this->sett->picture_frame->picture_quad->valign.'" ';
+							
+							if($this->sett->picture_frame->picture_quad->imagefocus == ''){
 								$xml .= "/>";
 							}
 							else{
-								$xml .= "imagefocus=\"$this->pf_pq_imageFocus\" url=\"$this->pf_hl_url\" /> ";
+								$xml .= ' 
+								imagefocus="'.$this->sett->picture_frame->picture_quad->imagefocus.'" 
+								url="'.$this->sett->picture_frame->hover_label->url.'" /> ';
 							}
-						$xml .= "
-						<label sizen=\"$this->pf_hl_sizen\"  url=\"$this->pf_hl_url\" halign=\"$this->pf_hl_halign\" valign=\"$this->pf_hl_valign\" focusareacolor1=\"$this->pf_hl_focusareacolor1\" focusareacolor2=\"$this->pf_hl_focusareacolor2\"/>
+						$xml .= '
+						<label 
+							sizen="'.$this->sett->picture_frame->hover_label->sizen.'"  
+							url="'.$this->sett->picture_frame->hover_label->url.'" 
+							halign="'.$this->sett->picture_frame->hover_label->halign.'" 
+							valign="'.$this->sett->picture_frame->hover_label->valign.'" 
+							focusareacolor1="'.$this->sett->picture_frame->hover_label->focusareacolor1.'" 
+							focusareacolor2="'.$this->sett->picture_frame->hover_label->focusareacolor2.'"
+						/>
 					</frame>
-				</manialink>";			
+				</manialink>';			
 		}
 		else{
-			$xml = <<<XML
-				<manialink id="9180$no" version="1">			
-
-				</manialink>			
-XML;
+			$xml = '<manialink id="230178'.$this->instanceNo.'" version="1"></manialink>';
 		}
 		
-		$this->aseco->client->query('SendDisplayManialinkPage', $xml, 0, false);
-    }
-
-
-		
+		return $xml;
+	}	
 }
+
+
+
+?>
